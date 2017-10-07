@@ -109,12 +109,12 @@ freq = FreqDist(tokens)
 for k, v in freq.items():
     print(str(k) + ':' + str(v))
 ```  
-![](python/1.png)  
+![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/1.png)  
 用matplotlib看一下：  
 ```python
 freq.plot(20, cumulative=False)
 ```
-![](python/2.png)  
+![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/2.png)  
 能看到比较高频的基本上都是标点和停用词，来过滤一下： 
 ```python
 from nltk.corpus import stopwords
@@ -128,7 +128,7 @@ for token in tokens:
         clean.append(token)
 ```
 这样就差不多了 XD  
-![](python/3.png)  
+![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/3.png)  
 然后还是用一样的方法计算cos值  
 这样看起来文本预处理简单了一些，但还是有43行代码，几乎所有的数据存储都用到列表，那么就来用
 ### **列表推导式**简化一下 XD   
@@ -166,7 +166,7 @@ with open('output3.txt','w') as f:
         f.write(sents[target]+'\n')
 ```
 在Sublime中打开是这样的：  
-![](python/code.png)   
+![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/code.png)   
 很漂亮吧！
 这样只有21行了！不过太复杂的列表推导式会降低代码的可读性，这可能有悖于python之禅([The Zen of Python](https://www.python.org/dev/peps/pep-0020/))  
    
