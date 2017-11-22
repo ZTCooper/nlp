@@ -1,13 +1,10 @@
-在做[show-me-the-code 0006](https://github.com/Show-Me-the-Code/show-me-the-code)的时候突然想起大一下学期被程序设计课支配的恐惧，大概内容就是提取[文章](https://github.com/ZTCooper/nlp-get-center/blob/master/python/input1.txt)的中心句，于是现在想用Python来试一下 XD   
-  
-欢迎大家交流自己的方法和代码！[README](https://github.com/ZTCooper/nlp-get-center)  
-  
+在做[show-me-the-code 0006](https://github.com/Show-Me-the-Code/show-me-the-code)的时候突然想起大一下学期被程序设计课支配的恐惧，大概内容就是提取[文章](https://github.com/ZTCooper/nlp/blob/master/get-center/input1.txt)的中心句，于是现在想用Python来试一下 XD   
 
-（主要计算每两句之间的cos值，取平均值最接近1的句子）  
+（计算每两句之间的cos值，取平均值最接近1的句子）  
   
 
 ### 首先硬碰硬：  
-[string.py](https://github.com/ZTCooper/nlp-get-center/blob/master/python/string.py)   
+[string.py](https://github.com/ZTCooper/nlp/blob/master/get-center/string.py)   
 * 读入  
 ```python
 with open('input1.txt') as f:
@@ -17,7 +14,7 @@ with open('input1.txt') as f:
 ```python
 sents = text.split('. ')        
 ```
-* 转换为小写，去掉一些标点 =\_=  最低级的文本处理方法 [string](https://github.com/ZTCooper/fragmented-py/blob/master/string.md)
+* 转换为小写，去掉一些标点 =\_=  用[string](https://github.com/ZTCooper/fragmented-py/blob/master/string.md)的方法处理文本
 ```python
 words = text.lower()
 words = words.replace(',','')
@@ -82,14 +79,13 @@ with open('output1.txt','w') as f:
     for target in targets:
         f.write(sents[target]+'\n')
 ```  
-47行代码，所有文本处理都手动来  
-最终得到了输出结果：    
-[output1.txt](https://github.com/ZTCooper/nlp-get-center/blob/master/python/output1.txt)    
+47行代码，最终得到了输出结果：    
+[output1.txt](https://github.com/ZTCooper/nlp/blob/master/get-center/output1.txt)    
   
 
 然而这一点都不*pythonic*，既然python自带电池，来试一下：  
 ### 用到`nltk` (Natural Language Toolkit)   
-[use-nltk.py](https://github.com/ZTCooper/nlp-get-center/blob/master/python/use-nltk.py)  
+[use-nltk.py](https://github.com/ZTCooper/nlp/blob/master/get-center/use-nltk.py)  
 首先将文本转换为tokens：  
 ```python
 from nltk.tokenize import word_tokenize
@@ -109,12 +105,12 @@ freq = FreqDist(tokens)
 for k, v in freq.items():
     print(str(k) + ':' + str(v))
 ```  
-![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/1.png)  
+![](https://github.com/ZTCooper/nlp/blob/master/get-center/1.png)  
 用matplotlib看一下：  
 ```python
 freq.plot(20, cumulative=False)
 ```
-![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/2.png)  
+![](https://github.com/ZTCooper/nlp/blob/master/get-center/2.png)  
 能看到比较高频的基本上都是标点和停用词，来过滤一下： 
 ```python
 from nltk.corpus import stopwords
@@ -128,11 +124,11 @@ for token in tokens:
         clean.append(token)
 ```
 这样就差不多了 XD  
-![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/3.png)  
+![](https://github.com/ZTCooper/nlp/blob/master/get-center/3.png)  
 然后还是用一样的方法计算cos值  
 这样看起来文本预处理简单了一些，但还是有43行代码，几乎所有的数据存储都用到列表，那么就来用
 ### **列表推导式**简化一下 XD   
-[simp.py](https://github.com/ZTCooper/nlp-get-center/blob/master/python/simp.py)
+[simp.py](https://github.com/ZTCooper/nlp/blob/master/get-center/simp.py)
 ```python
 from nltk.tokenize import word_tokenize
 from nltk.tokenize import sent_tokenize
@@ -166,13 +162,10 @@ with open('output3.txt','w') as f:
         f.write(sents[target]+'\n')
 ```
 在Sublime中打开是这样的：  
-![](https://github.com/ZTCooper/nlp-get-center/blob/master/python/code.png)   
+![](https://github.com/ZTCooper/nlp/blob/master/get-center/code.png)   
 很漂亮吧！
 这样只有21行了！不过太复杂的列表推导式会降低代码的可读性，这可能有悖于python之禅([The Zen of Python](https://www.python.org/dev/peps/pep-0020/))  
    
-如果是[爬虫](https://github.com/ZTCooper/crawler-scrapy)从网络上抓取下来的html页面，可能还需要先用[beautifulsoup](https://github.com/ZTCooper/fragmented-py/blob/master/beautifulsoup.md)或者[regular-expression](https://github.com/ZTCooper/fragmented-py/tree/master/regular_expression)来处理  
+如果是[爬虫](https://github.com/ZTCooper/crawler-scrapy)从网络上抓取下来的html页面，可能还需要先用[beautifulsoup](https://github.com/ZTCooper/fragmented-py/blob/master/beautifulsoup.md)或者[regular-expression](https://github.com/ZTCooper/fragmented-py/tree/master/regular_expression)来提取文本信息再进行处理  
   
-（代码可能还存在bug，因为[output2](https://github.com/ZTCooper/nlp-get-center/blob/master/python/output2)和[output3](https://github.com/ZTCooper/nlp-get-center/blob/master/python/output3)的结果不一样 =\_=   
-  
-
-欢迎来交流你自己的代码！[README](https://github.com/ZTCooper/nlp-get-center) XD
+（代码可能还存在bug，因为[output2](https://github.com/ZTCooper/nlp/blob/master/get-center/output2.txt)和[output3](https://github.com/ZTCooper/nlp/blob/master/get-center/output3.txt)的结果不一样 =\_=   
